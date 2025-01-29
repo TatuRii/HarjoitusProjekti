@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://b67eql1hixu4t"]
+
+[ext_resource type="Script" path="res://code/ProtoMover.cs" id="1_ylc1p"]
+[ext_resource type="Texture2D" uid="uid://bg0drhd6gbfcr" path="res://icon.svg" id="2_vnma4"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(65, 68)
+texture = ExtResource("2_vnma4")
+script = ExtResource("1_ylc1p")

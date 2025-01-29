@@ -26,6 +26,5 @@ public partial class HelloWorld : Node2D
 		currentNumber = nextNumber;
 
 		currentFrame ++;
-
 	}
 }
