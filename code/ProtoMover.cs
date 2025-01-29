@@ -3,7 +3,6 @@ using System;
 
 public partial class ProtoMover : Node2D
 {
-	[Export] public float _speed = 100.0f;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
