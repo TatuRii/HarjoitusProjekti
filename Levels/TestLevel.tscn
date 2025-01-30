@@ -9,3 +9,5 @@
 position = Vector2(65, 68)
 texture = ExtResource("2_vnma4")
 script = ExtResource("1_ylc1p")
+pointA = Vector2(100, 50)
+pointB = Vector2(50, 200)
