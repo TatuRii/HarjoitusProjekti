@@ -3,53 +3,54 @@ using System;
 
 namespace snakegame
 {
-
-
 	public partial class Snake : Node2D
 	{
 		[Export] public float speed = 100;
 
 		[Export] private Node2D mato = null;
 
-		// Called when the node enters the scene tree for the first time.
+		private Vector2 gridPosition;
+		private bool isMoving = false;
+
 		public override void _Ready()
 		{
-			mato.Position = GlobalPosition;
+			// Aseta mato johonkin lailliseen koordinaattiin gridillä pelin alussa
+			gridPosition = new Vector2(0, 0);
+			UpdateMatoPosition();
 		}
 
-		// Called every frame. 'delta' is the elapsed time since the previous frame.
 		public override void _Process(double delta)
 		{
-			Move();
+			Vector2 direction = Vector2.Zero; // Oletusarvoisesti ei liikuta
+
+			if (Input.IsActionJustPressed("MoveUp"))
+			{
+				direction = Vector2.Up;
+			}
+			else if (Input.IsActionJustPressed("MoveDown"))
+			{
+				direction = Vector2.Down;
+			}
+			else if (Input.IsActionJustPressed("MoveLeft"))
+			{
+				direction = Vector2.Left;
+			}
+			else if (Input.IsActionJustPressed("MoveRight"))
+			{
+				direction = Vector2.Right;
+			}
+
+			if (direction != Vector2.Zero) // Jos liikkumiskomento annettu
+			{
+				gridPosition += direction;
+				UpdateMatoPosition();
+			}
 		}
 
-		public void Move()
+		private void UpdateMatoPosition()
 		{
-			if (Input.IsActionPressed("MoveUp"))
-			{
-				GD.Print("I'm moving up!");
-				Vector2 movement = Vector2.Up * speed * (float)GetProcessDeltaTime();
-				mato.Translate(movement);
-
-			}
-			if (Input.IsActionPressed("MoveDown"))
-			{
-				GD.Print("I'm moving down!");
-				Vector2 movement = Vector2.Down * speed * (float)GetProcessDeltaTime();
-				mato.Translate(movement);
-			}
-			if (Input.IsActionPressed("MoveLeft"))
-			{
-				GD.Print("I'm moving left!");
-				Vector2 movement = Vector2.Left * speed * (float)GetProcessDeltaTime();
-				mato.Translate(movement);
-			}
-			if (Input.IsActionPressed("MoveRight"))
-			{
-				GD.Print("I'm moving right!");
-				Vector2 movement = Vector2.Right * speed * (float)GetProcessDeltaTime();
-				mato.Translate(movement);
-			}
+			// Muunna gridin koordinaatit pikselikoordinaateiksi
+			mato.Position = gridPosition * 16;
 		}
 	}
 }

@@ -1,11 +1,13 @@
 [gd_scene load_steps=3 format=3 uid="uid://b84l1c1alob4d"]
 
 [ext_resource type="Script" path="res://code/Snake.cs" id="1_w6roy"]
-[ext_resource type="Texture2D" uid="uid://bg0drhd6gbfcr" path="res://icon.svg" id="2_jiob2"]
+[ext_resource type="Texture2D" uid="uid://brkoqa3ak2t72" path="res://Art/Snake.png" id="2_mkvem"]
 
 [node name="Node2D" type="Node2D" node_paths=PackedStringArray("mato")]
 script = ExtResource("1_w6roy")
 mato = NodePath("Sprite2D")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_jiob2")
+texture = ExtResource("2_mkvem")
+region_enabled = true
+region_rect = Rect2(0, 0, 16, 16)
