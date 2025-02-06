@@ -11,6 +11,7 @@ namespace snakegame
 
 		private Vector2 gridPosition;
 		private bool isMoving = false;
+		private Vector2 currentDirection = Vector2.Up;
 
 		public override void _Ready()
 		{
@@ -40,10 +41,29 @@ namespace snakegame
 				direction = Vector2.Right;
 			}
 
-			if (direction != Vector2.Zero) // Jos liikkumiskomento annettu
+			if (direction != Vector2.Zero)
 			{
-				gridPosition += direction;
+				currentDirection = direction; // Päivitetään nykyinen suunta
+				gridPosition += currentDirection;
 				UpdateMatoPosition();
+
+				// Käännä matoa
+				if (currentDirection == Vector2.Up)
+				{
+					mato.RotationDegrees = 0;
+				}
+				else if (currentDirection == Vector2.Down)
+				{
+					mato.RotationDegrees = 180;
+				}
+				else if (currentDirection == Vector2.Left)
+				{
+					mato.RotationDegrees = -90;
+				}
+				else if (currentDirection == Vector2.Right)
+				{
+					mato.RotationDegrees = 90;
+				}
 			}
 		}
 
