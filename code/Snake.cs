@@ -1,4 +1,5 @@
 using Godot;
+using SnakeGame;
 using System;
 
 namespace snakegame
@@ -6,71 +7,68 @@ namespace snakegame
 	public partial class Snake : Node2D
 	{
 		[Export] public float speed = 100;
-
 		[Export] private Node2D mato = null;
-
-		private Vector2 gridPosition;
-		private bool isMoving = false;
+		[Export] private Grid _grid;
+		private Vector2I gridPosition;
 		private Vector2 currentDirection = Vector2.Up;
 
 		public override void _Ready()
 		{
-			// Aseta mato johonkin lailliseen koordinaattiin gridillä pelin alussa
-			gridPosition = new Vector2(0, 0);
-			UpdateMatoPosition();
+			if (_grid != null)
+			{
+				gridPosition = new Vector2I(_grid.Width / 2, _grid.Height / 2); // Center of the grid
+				if (_grid.GetWorldPosition(gridPosition, out Vector2 worldPosition))
+				{
+					mato.Position = worldPosition;
+				}
+			}
 		}
 
 		public override void _Process(double delta)
 		{
-			Vector2 direction = Vector2.Zero; // Oletusarvoisesti ei liikuta
-
 			if (Input.IsActionJustPressed("MoveUp"))
 			{
-				direction = Vector2.Up;
+				currentDirection = Vector2.Up;
+				mato.RotationDegrees = 0;
+				MoveSnake();
 			}
 			else if (Input.IsActionJustPressed("MoveDown"))
 			{
-				direction = Vector2.Down;
+				currentDirection = Vector2.Down;
+				mato.RotationDegrees = 180;
+				MoveSnake();
 			}
 			else if (Input.IsActionJustPressed("MoveLeft"))
 			{
-				direction = Vector2.Left;
+				currentDirection = Vector2.Left;
+				mato.RotationDegrees = -90;
+				MoveSnake();
 			}
 			else if (Input.IsActionJustPressed("MoveRight"))
 			{
-				direction = Vector2.Right;
-			}
-
-			if (direction != Vector2.Zero)
-			{
-				currentDirection = direction; // Päivitetään nykyinen suunta
-				gridPosition += currentDirection;
-				UpdateMatoPosition();
-
-				// Käännä matoa
-				if (currentDirection == Vector2.Up)
-				{
-					mato.RotationDegrees = 0;
-				}
-				else if (currentDirection == Vector2.Down)
-				{
-					mato.RotationDegrees = 180;
-				}
-				else if (currentDirection == Vector2.Left)
-				{
-					mato.RotationDegrees = -90;
-				}
-				else if (currentDirection == Vector2.Right)
-				{
-					mato.RotationDegrees = 90;
-				}
+				currentDirection = Vector2.Right;
+				mato.RotationDegrees = 90;
+				MoveSnake();
 			}
 		}
 
-		private void UpdateMatoPosition()
+		private void MoveSnake()
 		{
-			// Muunna gridin koordinaatit pikselikoordinaateiksi
-			mato.Position = gridPosition * 16;
+			Vector2I newGridPosition = gridPosition + new Vector2I((int)currentDirection.X, (int)currentDirection.Y);
+
+			// Prevent moving outside the grid
+			if (newGridPosition.X < 0 || newGridPosition.X >= _grid.Width ||
+				newGridPosition.Y < 0 || newGridPosition.Y >= _grid.Height)
+			{
+				return; // Stop movement if out of bounds
+			}
+
+			gridPosition = newGridPosition; // Update position if valid
+
+			if (_grid.GetWorldPosition(gridPosition, out Vector2 worldPosition))
+			{
+				mato.Position = worldPosition;
+			}
 		}
 	}
 }

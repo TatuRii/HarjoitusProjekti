@@ -5,12 +5,12 @@ namespace SnakeGame
 {
 	public partial class Grid : Node2D
 	{
-		[Export] private string _cellScenePath = "res://Level/Cell.tscn";
-		[Export] private int _width = 0;
-		[Export] private int _height = 0;
+		[Export] private string _cellScenePath = "res://Levels/Cell.tscn";
+		[Export] private int _width = 15;
+		[Export] private int _height = 13;
 
 		// Vector2I on integeriä kullekin koordinaatille yksikkönä käyttävä vektorityyppi.
-		[Export] private Vector2I _cellSize = Vector2I.Zero;
+		[Export] private Vector2I _cellSize = new Vector2I(16, 16);
 
 		public int Width { get { return _width; } }
 		public int Height { get { return _height; } }
@@ -21,6 +21,7 @@ namespace SnakeGame
 
 		public override void _Ready()
 		{
+			// Alusta _cells taulukko
 			_cells = new Cell[_width, _height];
 
 			// Laske se piste, josta taulukon rakentaminen aloitetaan. Koska 1. solu luodaan gridin vasempaan
@@ -46,10 +47,13 @@ namespace SnakeGame
 					// Lisää juuri luotu Cell-olio gridin Nodepuuhun.
 					AddChild(cell);
 
-					Vector2 globalPosition = new Vector2(x * _cellSize.X, y * _cellSize.Y) - offset;
-					cell.Position = globalPosition;
+					// Laske ja aseta ruudun sijainti niin maailman koordinaatistossa kuin
+					// ruudukonkin koordinaatistossa. Aseta ruudun sijainti käyttäen cell.Position propertyä.
+					cell.Position = new Vector2(x * _cellSize.X, y * _cellSize.Y) - offset;
+					// Ruudukon koordinaatit tallennetaan solun tietoihin.
 					cell.GridPosition = new Vector2I(x, y);
 
+					// Tallenna ruutu tietorakenteeseen oikealle paikalle.
 					_cells[x, y] = cell;
 				}
 			}
@@ -57,17 +61,16 @@ namespace SnakeGame
 
 		public bool GetWorldPosition(Vector2I gridPosition, out Vector2 worldPosition)
 		{
-			if (gridPosition.X >= 0 && gridPosition.X < _width && gridPosition.Y >= 0 && gridPosition.Y < _height)
-			{
-				worldPosition = new Vector2(gridPosition.X * _cellSize.X, gridPosition.Y * _cellSize.Y);
-
-				return true;
-			}
-			else
+			if (gridPosition.X < 0 || gridPosition.Y < 0
+				|| gridPosition.X >= Width || gridPosition.Y >= Height)
 			{
 				worldPosition = Vector2.Zero;
+				// Koordinaatti ei ole gridillä
 				return false;
 			}
+			// Olettaa Gridin olevan 0,0 koordinaatissa. Voi käyttää myös GlobalPositionia.
+			worldPosition = _cells[gridPosition.X, gridPosition.Y].Position;
+			return true;
 		}
 	}
 }
