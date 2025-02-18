@@ -1,4 +1,5 @@
 using Godot;
+using Microsoft.Win32.SafeHandles;
 using SnakeGame;
 using System;
 
@@ -9,6 +10,7 @@ namespace snakegame
 		[Export] public float speed = 100;
 		[Export] private Node2D mato = null;
 		[Export] private Grid _grid;
+		[Export] private NuclearWaste _nuclearWaste;
 		private Vector2I gridPosition;
 		private Vector2 currentDirection = Vector2.Up;
 
@@ -16,7 +18,7 @@ namespace snakegame
 		{
 			if (_grid != null)
 			{
-				gridPosition = new Vector2I(_grid.Width / 2, _grid.Height / 2); // Center of the grid
+				gridPosition = new Vector2I(_grid.Width / 2, _grid.Height / 2);
 				if (_grid.GetWorldPosition(gridPosition, out Vector2 worldPosition))
 				{
 					mato.Position = worldPosition;
@@ -24,8 +26,13 @@ namespace snakegame
 			}
 		}
 
+
 		public override void _Process(double delta)
 		{
+			if (gridPosition == _nuclearWaste.GridPosition)
+			{
+				mato.Visible = false;
+			}
 			if (Input.IsActionJustPressed("MoveUp"))
 			{
 				currentDirection = Vector2.Up;

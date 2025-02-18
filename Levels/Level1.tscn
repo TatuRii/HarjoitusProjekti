@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=4 uid="uid://b31fbalusocj8"]
+[gd_scene load_steps=9 format=4 uid="uid://b31fbalusocj8"]
 
 [ext_resource type="TileSet" uid="uid://cp861id50yr1p" path="res://Levels/MapTiles.tres" id="1_mok2a"]
 [ext_resource type="Script" path="res://code/HelloWorld.cs" id="1_ru2k2"]
 [ext_resource type="Texture2D" uid="uid://cbk6w7ywi5teq" path="res://Art/Grid.png" id="2_npymv"]
 [ext_resource type="PackedScene" uid="uid://doy801xmheqeb" path="res://Levels/Grid.tscn" id="4_ux1dk"]
 [ext_resource type="PackedScene" uid="uid://b84l1c1alob4d" path="res://Levels/Snake.tscn" id="5_skyym"]
+[ext_resource type="PackedScene" uid="uid://dlgho8a0umecr" path="res://Levels/NuclearWaste.tscn" id="6_b60s3"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_g6y06"]
 texture = ExtResource("2_npymv")
@@ -51,6 +52,10 @@ position = Vector2(8, 8)
 _width = 15
 _height = 13
 
-[node name="Snake" parent="." node_paths=PackedStringArray("_grid") instance=ExtResource("5_skyym")]
+[node name="Snake" parent="." node_paths=PackedStringArray("_grid", "_nuclearWaste") instance=ExtResource("5_skyym")]
 position = Vector2(8, 4)
 _grid = NodePath("../Grid")
+_nuclearWaste = NodePath("../NuclearWaste")
+
+[node name="NuclearWaste" parent="." instance=ExtResource("6_b60s3")]
+position = Vector2(32, 32)

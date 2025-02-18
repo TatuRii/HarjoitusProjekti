@@ -1,0 +1,8 @@
+[gd_scene load_steps=3 format=3 uid="uid://dlgho8a0umecr"]
+
+[ext_resource type="Texture2D" uid="uid://fmxm1lsa6pao" path="res://Art/Collectables/radioactive.png" id="1_ysh4j"]
+[ext_resource type="Script" path="res://code/NuclearWaste.cs" id="2_pqujy"]
+
+[node name="NuclearWaste" type="Sprite2D"]
+texture = ExtResource("1_ysh4j")
+script = ExtResource("2_pqujy")
