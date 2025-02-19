@@ -14,6 +14,7 @@ namespace SnakeGame
 		private Vector2I gridPosition;
 		private Vector2 currentDirection = Vector2.Up;
 		private bool isDead = false;
+		private Timer _timer;
 
 		public override void _Ready()
 		{
@@ -27,6 +28,18 @@ namespace SnakeGame
 			}
 
 			_nuclearWaste.SetRandomGridPosition(_grid, gridPosition);
+
+			_timer = new Timer();
+			AddChild(_timer);
+			_timer.WaitTime = 0.5f; // Aika sekunteina
+			_timer.OneShot = false; // Toistetaan ajastinta
+			_timer.Timeout += OnTimerTimeout; // Yhdistetään timeout-signaali OnTimerTimeout-metodiin
+			_timer.Start(); // Käynnistetään ajastin
+		}
+
+		private void OnTimerTimeout()
+		{
+			MoveSnake(); // Kutsutaan MoveSnake-metodia ajastimen jokaisella tikityksellä
 		}
 
 
@@ -41,25 +54,21 @@ namespace SnakeGame
 			{
 				currentDirection = Vector2.Up;
 				mato.RotationDegrees = 0;
-				MoveSnake();
 			}
 			else if (Input.IsActionJustPressed("MoveDown"))
 			{
 				currentDirection = Vector2.Down;
 				mato.RotationDegrees = 180;
-				MoveSnake();
 			}
 			else if (Input.IsActionJustPressed("MoveLeft"))
 			{
 				currentDirection = Vector2.Left;
 				mato.RotationDegrees = -90;
-				MoveSnake();
 			}
 			else if (Input.IsActionJustPressed("MoveRight"))
 			{
 				currentDirection = Vector2.Right;
 				mato.RotationDegrees = 90;
-				MoveSnake();
 			}
 			Reset();
 		}
@@ -88,7 +97,7 @@ namespace SnakeGame
 			if (isDead && Input.IsActionJustPressed("Restart"))
 			{
 				_grid.ClearGrid();
-				
+
 				mato.QueueFree();
 				_nuclearWaste.QueueFree();
 

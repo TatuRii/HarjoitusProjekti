@@ -55,4 +55,8 @@ position = Vector2(8, 4)
 _grid = NodePath("../Grid")
 _nuclearWaste = NodePath("../NuclearWaste")
 
+[node name="Timer" type="Timer" parent="Snake"]
+
 [node name="NuclearWaste" parent="." instance=ExtResource("6_b60s3")]
+
+[connection signal="timeout" from="Snake/Timer" to="Snake" method="_on_timer_timeout"]
