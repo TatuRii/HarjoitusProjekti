@@ -72,5 +72,60 @@ namespace SnakeGame
 			worldPosition = _cells[gridPosition.X, gridPosition.Y].Position;
 			return true;
 		}
+
+		public void ClearGrid()
+		{
+			// Käy läpi kaikki ruudukon solut ja vapauta ne
+			for (int x = 0; x < _width; ++x)
+			{
+				for (int y = 0; y < _height; ++y)
+				{
+					// Varmistetaan, että solu ei ole null
+					if (_cells[x, y] != null)
+					{
+						_cells[x, y].QueueFree();  // Vapautetaan solu
+					}
+				}
+			}
+
+			// Piirrä ruudukko uudelleen
+			RedrawGrid();
+		}
+
+		public void RedrawGrid()
+		{
+			// Laske se piste, josta taulukon rakentaminen aloitetaan
+			Vector2 offset = new Vector2((_width * _cellSize.X) / 2, (_height * _cellSize.Y) / 2);
+
+			// Lataa Cell-scene
+			PackedScene cellScene = ResourceLoader.Load<PackedScene>(_cellScenePath);
+			if (cellScene == null)
+			{
+				GD.PrintErr("Cell sceneä ei löydy! Gridiä ei voi luoda!");
+				return;
+			}
+
+			// Alustetaan Grid uudelleen
+			for (int x = 0; x < _width; ++x)
+			{
+				for (int y = 0; y < _height; ++y)
+				{
+					// Luo uusi olio Cell-scenestä
+					Cell cell = cellScene.Instantiate<Cell>();
+					// Lisää juuri luotu Cell-olio gridin Nodepuuhun
+					AddChild(cell);
+
+					// Laske ja aseta ruudun sijainti niin maailman koordinaatistossa kuin
+					// ruudukon koordinaatistossa. Aseta ruudun sijainti käyttäen cell.Position propertyä.
+					cell.Position = new Vector2(x * _cellSize.X, y * _cellSize.Y) - offset;
+
+					// Ruudukon koordinaatit tallennetaan solun tietoihin
+					cell.GridPosition = new Vector2I(x, y);
+
+					// Tallenna ruutu tietorakenteeseen oikealle paikalle
+					_cells[x, y] = cell;
+				}
+			}
+		}
 	}
 }

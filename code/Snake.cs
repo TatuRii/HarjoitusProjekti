@@ -3,7 +3,7 @@ using Microsoft.Win32.SafeHandles;
 using SnakeGame;
 using System;
 
-namespace snakegame
+namespace SnakeGame
 {
 	public partial class Snake : Node2D
 	{
@@ -13,6 +13,7 @@ namespace snakegame
 		[Export] private NuclearWaste _nuclearWaste;
 		private Vector2I gridPosition;
 		private Vector2 currentDirection = Vector2.Up;
+		private bool isDead = false;
 
 		public override void _Ready()
 		{
@@ -24,6 +25,8 @@ namespace snakegame
 					mato.Position = worldPosition;
 				}
 			}
+
+			_nuclearWaste.SetRandomGridPosition(_grid, gridPosition);
 		}
 
 
@@ -32,6 +35,7 @@ namespace snakegame
 			if (gridPosition == _nuclearWaste.GridPosition)
 			{
 				mato.Visible = false;
+				isDead = true;
 			}
 			if (Input.IsActionJustPressed("MoveUp"))
 			{
@@ -57,6 +61,7 @@ namespace snakegame
 				mato.RotationDegrees = 90;
 				MoveSnake();
 			}
+			Reset();
 		}
 
 		private void MoveSnake()
@@ -75,6 +80,34 @@ namespace snakegame
 			if (_grid.GetWorldPosition(gridPosition, out Vector2 worldPosition))
 			{
 				mato.Position = worldPosition;
+			}
+		}
+
+		public void Reset()
+		{
+			if (isDead && Input.IsActionJustPressed("Restart"))
+			{
+				_grid.ClearGrid();
+				
+				mato.QueueFree();
+				_nuclearWaste.QueueFree();
+
+				mato = (Node2D)GD.Load<PackedScene>("res://Levels/Snake.tscn").Instantiate();
+				AddChild(mato);
+
+				_nuclearWaste = (NuclearWaste)GD.Load<PackedScene>("res://Levels/NuclearWaste.tscn").Instantiate();
+				AddChild(_nuclearWaste);
+
+				gridPosition = new Vector2I(_grid.Width / 2, _grid.Height / 2);
+				if (_grid.GetWorldPosition(gridPosition, out Vector2 worldPosition))
+				{
+					mato.Position = worldPosition; ;
+				}
+
+				// NuclearWaste saa satunnaisen paikan ruudukosta
+				_nuclearWaste.SetRandomGridPosition(_grid, gridPosition);
+
+				isDead = false;
 			}
 		}
 	}

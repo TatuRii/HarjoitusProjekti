@@ -1,7 +1,6 @@
-[gd_scene load_steps=9 format=4 uid="uid://b31fbalusocj8"]
+[gd_scene load_steps=8 format=4 uid="uid://b31fbalusocj8"]
 
 [ext_resource type="TileSet" uid="uid://cp861id50yr1p" path="res://Levels/MapTiles.tres" id="1_mok2a"]
-[ext_resource type="Script" path="res://code/HelloWorld.cs" id="1_ru2k2"]
 [ext_resource type="Texture2D" uid="uid://cbk6w7ywi5teq" path="res://Art/Grid.png" id="2_npymv"]
 [ext_resource type="PackedScene" uid="uid://doy801xmheqeb" path="res://Levels/Grid.tscn" id="4_ux1dk"]
 [ext_resource type="PackedScene" uid="uid://b84l1c1alob4d" path="res://Levels/Snake.tscn" id="5_skyym"]
@@ -27,7 +26,6 @@ texture = ExtResource("2_npymv")
 sources/0 = SubResource("TileSetAtlasSource_g6y06")
 
 [node name="Node2D" type="Node2D"]
-script = ExtResource("1_ru2k2")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 
@@ -58,4 +56,3 @@ _grid = NodePath("../Grid")
 _nuclearWaste = NodePath("../NuclearWaste")
 
 [node name="NuclearWaste" parent="." instance=ExtResource("6_b60s3")]
-position = Vector2(32, 32)
